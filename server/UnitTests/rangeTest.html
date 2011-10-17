@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <script src="ranges.js"></script>
+</head>
+<body>
+<script>
+    var t = new Range(312,330);
+    var t2 = new Range(331,340);
+    var t3 = new Range(300,311);
+    var t4 = new Range(10,13);
+
+    //console.log(t.extend(t2));
+    //console.log(t.extend(t3));
+    //console.log(t.extend(t4));
+    //console.log(t);
+
+    var r = new Region();
+    console.log(r.addRange(new Range(5,10)));
+    //r.addRange(new Range(112,112));
+    //console.log(r.addRange(new Range(115,120)));
+    //console.log(r.addRange(new Range(113,113)));
+    //console.log(r.isInRegion({begin:0,end:0}));
+    console.log(r.addRange(new Range(0,12)));
+    console.log(r.region);
+</script>
+</body>
+</html>

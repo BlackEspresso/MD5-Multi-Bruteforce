@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Distributor Test</title>
+    <meta charset="utf-8">
+    <script src="chargen.js"></script>
+    <script src="ranges.js"></script>
+    <script src="distributor.js"></script>
+</head>
+<body>
+<script>
+    var chargen = new GenPass(3);
+    var dist = new Distributor(chargen,10);
+    while(dist.hasNewRange()){
+        var nr = dist.getNewPassRange();
+        console.log(nr.rSta +" "+nr.rStp);
+        var startA = chargen.addToPassword(chargen.ZeroPassword(),nr.rSta);
+        var stopA = chargen.addToPassword(chargen.ZeroPassword(),nr.rStp);
+        console.log(chargen.getPassword(startA) + " " + chargen.getPassword(stopA));
+        dist.ackRange(nr.rId);
+
+    }
+</script>
+</body>
+</html>

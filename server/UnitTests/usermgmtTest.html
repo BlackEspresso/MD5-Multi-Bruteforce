@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+</head>
+<body>
+<script src="UserMgmt.js"></script>
+<script>
+
+    var sleep = function(duration){
+        var tstart = new Date().getTime();
+        while(new Date().getTime()-tstart<duration){}
+    }
+
+    var users = new exports.Users();
+    console.log(users.addUser());
+    sleep(800);
+    var inactive = users.findInactiveUserIds(500)
+    console.log(inactive);
+    for(var x=0;x<inactive.length;x++){
+        users.deleteUser(inactive[x]);
+        console.log("deleted "+inactive[x]);
+    }
+
+
+
+</script>
+</body>
+</html>

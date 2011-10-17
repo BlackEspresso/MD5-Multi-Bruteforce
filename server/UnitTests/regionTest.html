@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+</head>
+<body>
+<script src="ranges.js"></script>
+<script>
+    var t = new Region();
+    t.addRange(new Range(1,4));
+    t.addRange(new Range(8,11));
+    t.addRange(new Range(22,23));
+    //t.removeRange(new Range(2,2))
+    //t.removeRange(new Range(3,3))
+    console.log(t.addRange(new Range(0,5)));
+    console.log(t.addRange(new Range(8,10)));
+    console.log(t.addRange(new Range(18,20)));
+    console.log(t.addRange(new Range(7,11)));
+    
+    console.log(t);
+
+</script>
+</body>
+</html>
