@@ -11,24 +11,29 @@ Range.fromObj = function(obj){
 Range.prototype.copy = function(){
     return new Range(this.begin,this.end);
 };
-
+Range.isRange = function(n){
+    if(n instanceof Range && typeof(n.begin) === 'number' && typeof(n.end) === 'number')
+        return true;
+    return false;
+}
 Range.prototype.isInRange = function(n){
-    if (n instanceof Number){
+    if (typeof(n)==='number'){
         if (n >= this.begin && n < this.end){
             return true;
         }
     }
-    if (typeof n !== 'undefined' && n.begin !== 'undefined' && n.end !== 'undefined'){
+    if (Range.isRange(n)){
         if(n.begin >= this.begin && n.end <= this.end)
             return true;
     }
     return false;
 };
+
 Range.prototype.matches = function(range){
-    if (range.begin <= this.begin && range.end-1 >= this.begin){
+    if (range.begin <= this.begin && range.end >= this.begin){
         return 0; // Matches on the start
     }
-    if (range.begin <= this.end+1 && range.end >= this.end){
+    if (range.begin <= this.end && range.end >= this.end){
         return 1; // matches on the end
     }
     return -1;
@@ -121,20 +126,30 @@ Region.prototype.removeRange = function(range){
 };
 Region.prototype.addRange = function(ra){
     var range = ra.copy();
+    // case 1: range is empty
     if(this.region.length === 0){
         this.region.push(range);
         return "added as first element";
     }
-
+    // case 2: ra is bigger than one region-Range
+    // delete this range an
+    var biggerRange = false;
     for(var x=0;x<this.region.length;x++){
         if(range.isInRange(this.region[x])){
             this.region.splice(x,1);
-            this.addRange(range);
-            this.CleanUp();
-            return "deletet&added Range";
+            biggerRange = true;
         }
     }
-        
+    if(biggerRange)
+    {
+        this.addRange(range);
+        this.CleanUp();
+        return "deletet&added Range";
+    }
+
+    // case 3: extend a Region-Range
+    // case 4: insert between two Region-Ranges
+    // case 5: already in Range
     for(var x=0;x<this.region.length;x++){
         var reg = this.region[x];
         if(reg.matches(range)>=0){
@@ -149,6 +164,10 @@ Region.prototype.addRange = function(ra){
                 return "insert between ranges";
             }
         }
+        if(range.begin >= reg.begin && range.end <= reg.end)
+        {
+            return "already in range";
+        }
     }
     if(range.begin > this.region[this.region.length-1].end){
         this.region.push(range);
@@ -158,9 +177,6 @@ Region.prototype.addRange = function(ra){
         this.region.splice(0,0,range);
         return "insert in first place";
     }
-
-
-
     console.log("addRange Error: " + range.begin + " " + range.end);
     //throw("Region.addRange : Theres something going on ...");
 };

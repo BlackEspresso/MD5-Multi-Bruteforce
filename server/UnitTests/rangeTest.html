@@ -3,7 +3,7 @@
 <head>
     <title></title>
     <meta charset="utf-8">
-    <script src="ranges.js"></script>
+    <script src="../ranges.js"></script>
 </head>
 <body>
 <script>
@@ -19,12 +19,35 @@
 
     var r = new Region();
     console.log(r.addRange(new Range(5,10)));
-    //r.addRange(new Range(112,112));
-    //console.log(r.addRange(new Range(115,120)));
-    //console.log(r.addRange(new Range(113,113)));
-    //console.log(r.isInRegion({begin:0,end:0}));
-    console.log(r.addRange(new Range(0,12)));
-    console.log(r.region);
+    var x,y,ret,min, max;
+    for(var z=0;z<1000000;z++)
+    {
+        x = parseInt(Math.random()*100000);
+        y = x+parseInt(Math.random()*100000);
+        if(z==0)
+        {
+            min = x;
+            max = y;
+        }
+
+        min = x < min ? x : min;
+        max = y > max ? y : max;
+        try{ret =  r.addRange(new Range(x,y));}
+        catch(w){
+            console.log("--Error--");
+            console.log(r.region);
+            console.log(x + "|" + y);
+            break;
+        }
+    }
+    if (r.region[0].begin == min && r.region[0].end == max)
+    {
+        console.log("OK");
+    }
+    else
+    {
+        console.log("ERROR");
+    }
 </script>
 </body>
 </html>

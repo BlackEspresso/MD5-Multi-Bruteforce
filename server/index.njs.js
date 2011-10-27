@@ -16,6 +16,7 @@ hashMgmt.addHash('74b87337454200d4d33f80c4663dc5e5');
 hashMgmt.addHash('02c425157ecd32f259548b33402ff6d3');
 hashMgmt.addHash('594f803b380a41396ed63dca39503542');
 hashMgmt.addHash('95ebc3c7b3b9f1d2c40fec14415d3cb8');
+hashMgmt.addHash('coffeecoffeecoffeecoffeecoffeeco');
 
 
 var PasswordStartLength = 4;
@@ -53,13 +54,12 @@ io.sockets.on('connection',function(socket){
         if(dist.hasNewRange()){
             var newRange = dist.getNewPassRange();
             socket.emit('newRange',newRange);
-            //console.log(newRange.rId.begin);
         }
         else{
             console.log("new PassRange");
             socket.emit('aMessage',{msg:'Passwords with Length: ' + dist.pGenerator.pLen +
                 ' done, gona switch...'});
-            socket.emit('newPasswordLength',{});
+            socket.emit('flushHistory',{});
             PasswordLength++;
             if (PasswordLength>PasswordMaxLength){
                 PasswordLength = PasswordStartLength;
@@ -67,9 +67,8 @@ io.sockets.on('connection',function(socket){
             }
             chGen = new chargen.GenPass(PasswordLength);
             dist = new distributor.Distributor(chGen,'',300000);
-            var newRange = dist.getNewPassRange();
-            socket.emit('newRange',newRange);
-            //console.log(newRange.rId.begin);
+            // wait few seconds then start new Password Range
+            setInterval(fireNewPassRange,1000);
         }
     };
     socket.on('getRange',function(data){
@@ -117,6 +116,7 @@ io.sockets.on('connection',function(socket){
         updateStats();
         socket.emit('StatusUpdate',stats);
     },5000);
+    
 });
 
 

@@ -39,15 +39,11 @@ Distributor.prototype.hasNewRange = function(){
 
 Distributor.prototype.getNewPassRange = function(){
     if (this.hasNewRange()){
+        var RangeId;
         if (!this.openRegion.isEmpty())
-            var RangeId = this.openRegion.getASingleRange();
-        //else if(!this.inProgressRegion.isEmpty())
-        //    var RangeId = this.inProgressRegion.getASingleRange();
-        else
-            throw("Empty Ranges!")
+            RangeId = this.openRegion.getASingleRange();
         this.inProgressRegion.addRange(RangeId);
-        //debugger;
-        // if lastId modify the RangeSize if needed
+        // if range is last range, modify RangeSize
         var pr;
         if (RangeId.begin === this.nRanges){
             var rest = this.poolSize - this.RangeSize*(RangeId.begin+1);
@@ -69,6 +65,7 @@ Distributor.prototype.getNewPassRange = function(){
 Distributor.prototype.ackRange = function(RangeId){
     if (this.inProgressRegion.isInRegion(RangeId)){
         this.inProgressRegion.removeRange(RangeId);
+        this.openRegion.removeRange(RangeId);
         this.processedRegion.addRange(RangeId);
         for(var x=0;x<this.inProgressPassRanges.length;x++){
             var pr = this.inProgressPassRanges[x];
@@ -97,9 +94,14 @@ Distributor.prototype.createPassRangeObj = function(RangeId,PassStart,PassStop){
         tSta : new Date()
     }
 };
+// Stats last 100 seconds
 Distributor.prototype.AckPerSecond = function(){
     var timenow = new Date().getTime();
     return this.ackCount / (timenow-this.startTime) * 1000;
+    if (timenow - this.startTime > 100e3)
+    {
+        this.startTime = timenow;
+    }
 };
 
 // Node.JS

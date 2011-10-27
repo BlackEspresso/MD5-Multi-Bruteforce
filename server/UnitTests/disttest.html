@@ -3,22 +3,22 @@
 <head>
     <title>Distributor Test</title>
     <meta charset="utf-8">
-    <script src="chargen.js"></script>
-    <script src="ranges.js"></script>
-    <script src="distributor.js"></script>
+    <script src="./../../shared/chargen.js"></script>
+    <script src="./../ranges.js"></script>
+    <script src="./../distributor.js"></script>
 </head>
 <body>
 <script>
-    var chargen = new GenPass(3);
-    var dist = new Distributor(chargen,10);
-    while(dist.hasNewRange()){
+    var chargen = new GenPass(4);
+    var dist = new Distributor(chargen,'',300000);
+    var c = 0;
+    while(dist.hasNewRange() && c<100){
         var nr = dist.getNewPassRange();
-        console.log(nr.rSta +" "+nr.rStp);
+        console.log(nr.rId + "| " + nr.rSta +" "+nr.rStp);
         var startA = chargen.addToPassword(chargen.ZeroPassword(),nr.rSta);
         var stopA = chargen.addToPassword(chargen.ZeroPassword(),nr.rStp);
         console.log(chargen.getPassword(startA) + " " + chargen.getPassword(stopA));
-        dist.ackRange(nr.rId);
-
+        c++;
     }
 </script>
 </body>
