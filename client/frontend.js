@@ -1,4 +1,4 @@
-var socket = io.connect('http://euve2416.vserver.de:8080');
+var socket = io.connect('lvps83-169-34-160.dedicated.hosteurope.de:8080');
 var uid=-1;
 var searchHashes = [];
 var shutup = false;
@@ -78,8 +78,9 @@ socket.on('aMessage',function(data){
     myconsole.value+=data.msg+"\n";
     myconsole.scrollTop = myconsole.scrollHeight;
 });
-socket.on('newPasswordLength',function(data){
+socket.on('flushHistory',function(data){
     workHistory.free();
+    console.log("Flushing history");
 });
 
 // Init end

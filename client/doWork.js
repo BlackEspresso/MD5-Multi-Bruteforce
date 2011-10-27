@@ -1,4 +1,4 @@
-importScripts('../shared/md5.js');
+importScripts('md5.js');
 importScripts('../shared/chargen.js');
 
 var resultMD5Strings = [];
